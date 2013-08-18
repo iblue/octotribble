@@ -9,5 +9,7 @@ require './renderer'
 
 use Rack::Reloader # Reload stuff automatically (TODO: testing environment
                    # only)
-use Cache
+if ENV['RACK_ENV'] == "production"
+  use Cache
+end
 run Renderer.new
