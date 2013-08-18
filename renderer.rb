@@ -1,23 +1,64 @@
 class Renderer
   def call(env)
-    uri = URI::parse(env["REQUEST_URI"])
-    file_path = absolute_path = uri.path
-    if absolute_path[-1] == "/"
-      file_path += "index.html"
-    elsif !(absolute_path =~ /\.[a-zA-Z0-9]+$/)
-      file_path += ".html"
-    end
+    file_path = file_path_from_request_uri(env["REQUEST_URI"])
+    render_this = search_matching_file(file_path)
 
-
-    file_path = "./content/#{file_path}"
-
-    if !File.exists?(file_path)
+    if !render_this
       fh = File.open("./content/404.html")
       return [404, {"Content-Type" => "text/html"}, fh]
     end
 
-    fh = File.open(file_path)
+    [200, {"Content-Type" => "text/html"}, render(render_this)]
+  end
 
-    [200, {"Content-Type" => "text/html"}, fh]
+  private
+  def file_path_from_request_uri(uri)
+    absolute_path = URI::parse(uri).path
+
+    # Separate directory and file
+    if (match = absolute_path.match(/\A(.*)\/(.*)\Z/))
+      directory, file = match[1], match[2]
+    else
+      raise "Could not parse path"
+    end
+
+    # Remove extention
+    if (match = file.match(/\A([^.]*)\.(.*)\Z/))
+      file = match[1]
+      extention = match[2]
+    end
+
+    if file == ""
+      file = "index"
+    end
+
+    [directory, file, extention]
+  end
+
+  def search_matching_file(path)
+    directory, file, _ = path
+
+    %w(markdown html).each do |ext|
+      path = "./content/"+directory+"/"+file+"."+ext
+      return path if File.exists?(path)
+    end
+
+    return nil
+  end
+
+  def render(file)
+    _, _, ext = file.rpartition(".")
+
+    fh = File.open(file)
+
+    case ext
+    when "markdown"
+      markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, {})
+      [markdown.render(fh.map{|x| x}.join(""))]
+    when "html"
+      fh
+    else
+      raise "Don't know how to render this"
+    end
   end
 end
