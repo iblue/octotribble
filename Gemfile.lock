@@ -6,13 +6,17 @@ GEM
       debugger-linecache (~> 1.2.0)
     columnize (0.3.6)
     debugger-linecache (1.2.0)
+    haml (4.0.3)
+      tilt
     rack (1.5.2)
     redcarpet (3.0.0)
+    tilt (1.4.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   byebug
+  haml
   rack
   redcarpet
