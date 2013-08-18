@@ -11,6 +11,11 @@ class Renderer
     [200, {"Content-Type" => "text/html"}, render(render_this)]
   end
 
+  def self.register(extention, klass)
+    @@renderers ||= {}
+    @@renderers[extention] = klass
+  end
+
   private
   def file_path_from_request_uri(uri)
     absolute_path = URI::parse(uri).path
@@ -38,7 +43,7 @@ class Renderer
   def search_matching_file(path)
     directory, file, _ = path
 
-    %w(markdown html).each do |ext|
+    @@renderers.keys.each do |ext|
       path = "./content/"+directory+"/"+file+"."+ext
       return path if File.exists?(path)
     end
@@ -51,14 +56,12 @@ class Renderer
 
     fh = File.open(file)
 
-    case ext
-    when "markdown"
-      markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, {})
-      [markdown.render(fh.map{|x| x}.join(""))]
-    when "html"
-      fh
-    else
+    if !@@renderers[ext]
       raise "Don't know how to render this"
     end
+
+    @@renderers[ext].render(fh)
   end
 end
+
+Dir["./renderers/*.rb"].each{|file| require file}
