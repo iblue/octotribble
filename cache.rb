@@ -23,7 +23,7 @@ class Cache
 
     if status == 200 && !File.exists?(file_path)
       File.open(file_path, "w") do |fh|
-        fh.write body.join("")
+        fh.write body.map{|x| x}.join("")
         fh.close
       end
     end
