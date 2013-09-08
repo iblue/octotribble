@@ -9,28 +9,29 @@ end
 
 set :views, ['views', 'content']
 
+register Sinatra::AssetPack
+
+assets {
+  serve '/js',     from: 'app/js'        # Default
+  serve '/css',    from: 'app/css'       # Default
+  serve '/images', from: 'app/images'    # Default
+
+  # The second parameter defines where the compressed version will be served.
+  # (Note: that parameter is optional, AssetPack will figure it out.)
+  js :app, '/js/app.js', [
+    '/js/vendor/**/*.js',
+    '/js/lib/**/*.js'
+  ]
+
+  css :main, [ '/css/main.css' ]
+
+  js_compression  :jsmin    # :jsmin | :yui | :closure | :uglify
+  css_compression :sass   # :simple | :sass | :yui | :sqwish
+}
+
 helpers do
   def find_template(views, name, engine, &block)
     Array(views).each { |v| super(v, name, engine, &block) }
-  end
-
-  # TODO: Add hash and cashing
-  def stylesheet_link_tag(name)
-    '<link href="/stylesheets/'+name+'.css" rel="stylesheet" type="text/css" />'
-  end
-
-  # TODO: Add hash and cashing
-  def javascript_include_tag(name_or_path)
-    unless name_or_path =~ /^http(s)?:/
-      name_or_path = "/javascripts/#{name}.js"
-    end
-    '<script src="'+name_or_path+'" type="text/javascript"></script>'
-  end
-
-  # TODO: Add hash and cashing
-  # TODO: Use opts (:width, :height, :size, ...)
-  def image_tag(name, opts={})
-    '<img src="/images/'+name+'" />'
   end
 end
 
