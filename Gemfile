@@ -3,6 +3,7 @@ source "http://rubygems.org"
 gem "sinatra"                # Framework
 gem "sinatra-asset-pipeline" # Asset pipeline
 gem "sinatra-outputbuffer"   # Used by my fragment cache
+gem "rack-funky-cache"       # Write stuff to disk
 
 gem 'redcarpet' # MarkDown renderer
 gem 'haml'      # HAML renderer
