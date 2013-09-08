@@ -1,0 +1,19 @@
+!!!
+%html
+  %head
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1.0"}
+    = stylesheet_link_tag "main"
+    %title Octotribble Blog Engine
+    = javascript_include_tag "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    %script{:type => "text/x-mathjax-config"}
+      MathJax.Hub.Config({tex2jax:{inlineMath:[['$','$'],['$$','$$']]},"HTML-CSS":{linebreaks:{automatic:true}}});
+  %body
+    #header
+      .container
+        #logo
+          %a{href: "/"}
+            = image_tag "iblue.png", :height => "48", :width => "46"
+            %h1 iblue
+        #topnav
+          %h1 octotribble blog engine
+    #main.container= yield
