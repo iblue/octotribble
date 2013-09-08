@@ -33,6 +33,8 @@ GEM
       sprockets
       sprockets-helpers
       sprockets-sass
+    sinatra-outputbuffer (0.1.0)
+      sinatra (>= 1.0.a)
     sprockets (2.10.0)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -55,3 +57,4 @@ DEPENDENCIES
   sass
   sinatra
   sinatra-asset-pipeline
+  sinatra-outputbuffer

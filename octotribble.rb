@@ -23,9 +23,17 @@ class Octotribble < Sinatra::Base
 
   set :views, ['views', 'content']
 
+  register Sinatra::OutputBuffer # For cache
+
   helpers do
     def find_template(views, name, engine, &block)
       Array(views).each { |v| super(v, name, engine, &block) }
+    end
+
+    def cache(key, &block)
+      @@cache ||= {}
+      @@cache[key] = capture_html(&block) if !@@cache[key]
+      concat_content(@@cache[key])
     end
   end
 

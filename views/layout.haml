@@ -17,4 +17,6 @@
             %h1 iblue
         #topnav
           %h1 octotribble blog engine
+          - cache "foo" do
+            %p Generated #{Time.now}
     #main.container= yield

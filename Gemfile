@@ -2,6 +2,7 @@ source "http://rubygems.org"
 
 gem "sinatra"                # Framework
 gem "sinatra-asset-pipeline" # Asset pipeline
+gem "sinatra-outputbuffer"   # Used by my fragment cache
 
 gem 'redcarpet' # MarkDown renderer
 gem 'haml'      # HAML renderer
