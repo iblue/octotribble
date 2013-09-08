@@ -1,7 +1,7 @@
 source "http://rubygems.org"
 
-gem "sinatra"           # Framework
-gem "sinatra-assetpack" # Asset pipeline
+gem "sinatra"                # Framework
+gem "sinatra-asset-pipeline" # Asset pipeline
 
 gem 'redcarpet' # MarkDown renderer
 gem 'haml'      # HAML renderer

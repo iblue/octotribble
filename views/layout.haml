@@ -2,9 +2,10 @@
 %html
   %head
     %meta{name: "viewport", content: "width=device-width, initial-scale=1.0"}
-    = css :main
+    = stylesheet_tag 'main'
     %title Octotribble Blog Engine
-    = js "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    = javascript_tag "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    -# javascript_tag 'some.js', :expand => true 
     %script{:type => "text/x-mathjax-config"}
       MathJax.Hub.Config({tex2jax:{inlineMath:[['$','$'],['$$','$$']]},"HTML-CSS":{linebreaks:{automatic:true}}});
   %body
@@ -12,7 +13,7 @@
       .container
         #logo
           %a{href: "/"}
-            = img "/images/iblue.png", :height => "48", :width => "46"
+            %img{:src => (image_path "iblue.png"), :height => "48", :width => "46"}
             %h1 iblue
         #topnav
           %h1 octotribble blog engine
