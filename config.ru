@@ -8,4 +8,4 @@ else
 end
 
 require './octotribble.rb'
-run Octotribble
+run Octotribble::App

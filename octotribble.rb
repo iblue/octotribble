@@ -1,46 +1,28 @@
-require 'sinatra/asset_pipeline'
+require './lib/cache'
+require './lib/asset_pipeline'
 
-class Octotribble < Sinatra::Base
-   # Include these files when precompiling assets
-  set :assets_precompile, %w(main.css *.png *.jpg *.svg *.eot *.ttf *.woff)
+module Octotribble
+  class App < Sinatra::Base
+    register Octotribble::AssetPipeline
+    register Octotribble::Cache
 
-  # Logical path to your assets
-  set :assets_prefix, 'assets'
+    set :views, ['views', 'content']
 
-  # Use another host for serving assets
-  #set :asset_host, 'http://<id>.cloudfront.net'
-
-  # Serve assets using this protocol
-  set :assets_protocol, :http
-
-  # CSS minification
-  set :assets_css_compressor, :sass
-
-  # JavaScript minification
-  set :assets_js_compressor, :uglifier
-
-  register Sinatra::AssetPipeline
-
-  set :views, ['views', 'content']
-
-  register Sinatra::OutputBuffer # For cache
-
-  helpers do
-    def find_template(views, name, engine, &block)
-      Array(views).each { |v| super(v, name, engine, &block) }
+    helpers do
+      def find_template(views, name, engine, &block)
+        Array(views).each { |v| super(v, name, engine, &block) }
+      end
     end
 
-    def cache(key, &block)
-      @@cache ||= {}
-      @@cache[key] = capture_html(&block) if !@@cache[key]
-      concat_content(@@cache[key])
+    # for all markdown files, use layout.haml as layout
+    set :markdown, :layout_engine => :haml, :layout => :layout
+
+    get '/' do
+      markdown :index
     end
-  end
 
-  # for all markdown files, use layout.haml as layout
-  set :markdown, :layout_engine => :haml, :layout => :layout
-
-  get '/' do
-    markdown :index
+    get '/expire' do
+      expire_cache("foo")
+    end
   end
 end
