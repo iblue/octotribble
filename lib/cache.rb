@@ -18,6 +18,21 @@ module Octotribble
           delete_entry(key)
         end
 
+        def expire_page_cache(file)
+          file_name = "public/#{file}"
+          if File.exist?(file_name)
+            begin
+              File.delete(file_name)
+              true
+            rescue => e
+              # Just in case the error was caused by another process
+              # deleting the file first.
+              raise e if File.exist?(file_name)
+              false
+            end
+          end
+        end
+
         def write_entry(key, content)
           atomic_write(cache_file_name(key)) do |f|
             Marshal.dump(content, f)
