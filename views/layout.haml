@@ -21,7 +21,8 @@
         #topnav
           %h1 octotribble blog engine
     #main.container
-      .span12
-        =yield
+      .row
+        .span12
+          =yield
     - if @comments
       = haml :comments

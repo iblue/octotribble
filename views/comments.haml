@@ -1,0 +1,47 @@
+#comments.container
+  .span12
+    %hr
+  .row
+    .span6
+      - if @comments.count > 0
+        %h2 Kommentare
+      - @comments.all do |c|
+        - cache "comment-#{c.id}" do
+          %div.row{:id => "comment-#{c.id}"}
+            .span1
+              %img{:src => c.gravatar_url, :width => "70", :height => "70"}
+            .span5
+              %b= c.author_name
+              %i 
+                am
+                = c.created_at.strftime("%d.%m.%Y um %H:%M")
+              - if c.author_url
+                %br
+                Homepage:
+                %a{:href => c.author_url, :rel => "nofollow"}= c.author_url
+            .span6{:style => "margin-top: 10px"}
+              %p=c.content
+              %hr
+    .span6
+      %form{:action => "/comment", :method => "POST"}
+        %fieldset
+          %legend Schreibe einen Kommentar
+          %input{:type => "hidden", :name => "comment[page]", :value => @page}
+
+          %label{:for => "comment_author_name"} Name
+          %input{:type => "text", :placeholder => "Vorname Nachname", :id => "comment_author_name", :name => "comment[author_name]", :required => true}
+
+          %label{:for => "comment_author_name"} Homepage (optional)
+          %input{:type => "text", :placeholder => "http://www.example.org/", :id => "comment_author_url", :name => "comment[author_url]"}
+
+          %label{:for => "comment_author_email"} E-Mail
+          %input{:type => "text", :placeholder => "user@example.org", :id => "comment_author_email", :name => "comment[author_email]", :required => true}
+          %span.help-block 
+            (Deine E-Mail-Adresse wird nicht veröffentlicht, aber wenn du
+            bei <a href="http://gravatar.com/">Gravatar</a> eingetragen
+            bist, siehst du dein Bild.)
+
+          %label{:for => "comment_content"} Kommentar
+          %textarea.span6{:id => "comment_content", :name => "comment[content]", :rows => 5, :required => true}
+          .form-actions
+            %button.btn.btn-primary{:type => "submit"} Veröffentlichen

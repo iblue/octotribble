@@ -5,6 +5,15 @@ require './lib/frontmatter'
 
 module Octotribble
   class App < Sinatra::Base
+    # Fix rendering bugs
+    Tilt.register Tilt::RedcarpetTemplate::Redcarpet2, 'markdown', 'mkd', 'md'
+
+    set :markdown, :renderer => Redcarpet::Render::HTML,
+      :fenced_code_blocks => true,
+      :no_intra_emphasis => true,
+      :layout_engine => :haml
+
+    # Load lib
     register Octotribble::AssetPipeline
     register Octotribble::Cache
     register Octotribble::Database
