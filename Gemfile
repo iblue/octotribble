@@ -18,5 +18,8 @@ gem 'sqlite3'        # Should be sufficient for ever.
 # Frontmatter
 gem 'deep_merge' # For internals
 
+# Production server
+gem "unicorn"
+
 # ruby 2.0 debugger
 gem 'byebug', :group => :development
