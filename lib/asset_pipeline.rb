@@ -4,7 +4,7 @@ module Octotribble
   module AssetPipeline
      def self.registered(app)
       # Include these files when precompiling assets
-      app.set :assets_precompile, %w(main.css *.png *.jpg *.svg *.eot *.ttf *.woff)
+      app.set :assets_precompile, %w(application.css *.png *.jpg *.svg *.eot *.ttf *.woff)
 
       # Logical path to your assets
       app.set :assets_prefix, 'assets'

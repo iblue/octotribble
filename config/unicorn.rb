@@ -1,12 +1,12 @@
 # -*- encoding : utf-8 -*-
 environment = ENV['RAILS_ENV'] || 'production'
 
-root = File.expand_path File.dirname(__FILE__)
+root = File.expand_path(File.dirname(__FILE__)+"/..")
 
 working_directory root
-pid "/var/log/unicorn/unicorn.pid"
-stderr_path "/var/log/unicorn.log"
-stdout_path "/var/log/unicorn.log"
+pid "/var/log/octotribble/unicorn.pid"
+stderr_path "/var/log/octotribble/unicorn.log"
+stdout_path "/var/log/octotribble/unicorn.log"
 
 listen "/tmp/unicorn.octotribble.sock"
 
@@ -68,7 +68,7 @@ after_fork do |server, worker|
 
   begin
     # Make sure the database is accessible
-    `chown www-data:www-data #{rails_env}.db`
+    `chown www-data:www-data #{environment}.db`
 
     uid, gid = Process.euid, Process.egid
     user, group = 'www-data', 'www-data'
