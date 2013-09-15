@@ -20,21 +20,8 @@
             %h1 iblue
         #topnav
           %h1 octotribble blog engine
-    #main.container= yield
+    #main.container
+      .span12
+        =yield
     - if @comments
-      #comments.container
-        - @comments.all do |c|
-          - cache "comment_#{c.id}" do
-            %b=c.author_name
-            %p=c.content
-        %form{:action => "/comment", :method => "POST"}
-          %fieldset
-            %legend Schreibe einen Kommentar
-            %input{:type => "hidden", :name => "comment[page]", :value => @page}
-            %label{:for => "comment_author_name"} Name
-            %input{:type => "text", :placeholder => "Vorname Nachname", :id => "comment_author_name", :name => "comment[author_name]"}
-            %label{:for => "comment_author_email"} E-Mail
-            %input{:type => "text", :placeholder => "user@example.org", :id => "comment_author_email", :name => "comment[author_email]"}
-            %label{:for => "comment_content"} Kommentar
-            %textarea{:id => "comment_content", :name => "comment[content]", :rows => 3}
-            %button.btn.btn-primary{:type => "submit"} Veröffentlichen
+      = haml :comments

@@ -20,6 +20,9 @@ module Octotribble
 
         def expire_page_cache(file)
           file_name = "public/#{file}"
+          if file =~ /\/\Z/
+            file_name += "index.html"
+          end
           if File.exist?(file_name)
             begin
               File.delete(file_name)
