@@ -45,8 +45,7 @@ module Octotribble
       end
     end
 
-    get '/article/*' do
-      article = articles.select{|a| a["url"] == request.path_info}[0]
+    get '/*' do
       status 404 and return if !article
 
       @page     = article["path"]
