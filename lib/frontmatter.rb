@@ -31,6 +31,8 @@ module Octotribble
           content = File.open("./articles/#{item}", "rb"){|f| f.read}
           data = parse_yaml_front_matter(content)
 
+          next if data["ignore"]
+
           # Use filename. slugerize strips leading date.
           slug = slugerize(item.gsub(/\..+$/, ''))
 
