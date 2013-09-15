@@ -1,12 +1,14 @@
-require './lib/cache'
 require './lib/asset_pipeline'
+require './lib/cache'
 require './lib/database'
+require './lib/frontmatter'
 
 module Octotribble
   class App < Sinatra::Base
     register Octotribble::AssetPipeline
     register Octotribble::Cache
     register Octotribble::Database
+    register Octotribble::Frontmatter
 
     require './models/comment'
 
@@ -16,6 +18,10 @@ module Octotribble
       def find_template(views, name, engine, &block)
         Array(views).each { |v| super(v, name, engine, &block) }
       end
+
+      def link_to(title, url)
+        '<a href="'+url+'">'+title+'</a>'
+      end
     end
 
     # for all markdown files, use layout.haml as layout
@@ -23,7 +29,7 @@ module Octotribble
 
     get '/' do
       @comments = Comment.filter(:page => 'index')
-      markdown :index
+      haml :index
     end
 
     get '/expire' do
@@ -38,7 +44,6 @@ module Octotribble
       else
         # Möp!
       end
-      byebug
     end
   end
 end

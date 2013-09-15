@@ -15,5 +15,8 @@ gem 'sass'      # SASS stylesheet renderer
 gem 'sinatra-sequel' # Sequel and bindings
 gem 'sqlite3'        # Should be sufficient for ever.
 
+# Frontmatter
+gem 'deep_merge' # For internals
+
 # ruby 2.0 debugger
 gem 'byebug', :group => :development

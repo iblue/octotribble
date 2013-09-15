@@ -11,6 +11,7 @@ GEM
     coffee-script-source (1.6.3)
     columnize (0.3.6)
     debugger-linecache (1.2.0)
+    deep_merge (1.0.0)
     execjs (2.0.1)
     haml (4.0.3)
       tilt
@@ -60,6 +61,7 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
+  deep_merge
   haml
   rack-funky-cache
   redcarpet
