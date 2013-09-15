@@ -28,22 +28,31 @@ module Octotribble
     set :markdown, :layout_engine => :haml, :layout => :layout
 
     get '/' do
-      @comments = Comment.filter(:page => 'index')
       haml :index
     end
 
-    get '/expire' do
-      expire_cache("foo")
-    end
-
     post '/comment' do
+      # Check if there is an article with that path
+      article = articles.select{|a| a["path"] == params["comment"]["page"]}[0]
+      status 404 and return if !article
+
       @comment = Comment.new(params["comment"])
       if @comment.save
-        expire_page_cache("index.html")
-        redirect '/'
+        expire_page_cache(article["url"]+".html")
+        redirect article["url"]
       else
         # Möp!
       end
+    end
+
+    get '/article/*' do
+      article = articles.select{|a| a["url"] == request.path_info}[0]
+      status 404 and return if !article
+
+      @page     = article["path"]
+      @comments = Comment.filter(:page => @page)
+      content = File.open(article["path"], "rb"){|f| f.read}
+      markdown strip_frontmatter(content)
     end
   end
 end

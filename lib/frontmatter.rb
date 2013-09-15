@@ -2,6 +2,7 @@ require 'sinatra/sequel'
 
 module Octotribble
   module Frontmatter
+    FRONTMATTER_REGEX = /\A(---\s*\n.*?\n?)^(---\s*$\n?)/m
     def self.registered(app)
       app.extend ClassMethods
       app.read_front_matter
@@ -9,6 +10,10 @@ module Octotribble
       app.helpers do
         def articles
           self.class.articles
+        end
+
+        def strip_frontmatter(content)
+          content.sub(FRONTMATTER_REGEX, "")
         end
       end
     end
@@ -33,8 +38,7 @@ module Octotribble
       end
 
       def parse_yaml_front_matter(content)
-        yaml_regex = /\A(---\s*\n.*?\n?)^(---\s*$\n?)/m
-        if content =~ yaml_regex
+        if content =~ FRONTMATTER_REGEX
           YAML.load($1) || {}
         else
           false

@@ -3,3 +3,4 @@ content/*
 .sass-cache
 cache/*
 tmp/*
+*.db
