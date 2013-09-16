@@ -43,7 +43,7 @@ before_fork do |server, worker|
   #
   # Using this method we get 0 downtime deploys.
 
-  old_pid = '/var/log/unicorn.pid.oldbin'
+  old_pid = '/var/log/octotribble/unicorn.pid.oldbin'
   if File.exists?(old_pid) && server.pid != old_pid
     begin
       Process.kill("QUIT", File.read(old_pid).to_i)
@@ -67,9 +67,6 @@ after_fork do |server, worker|
   # drop the workers to deploy:deploy
 
   begin
-    # Make sure the database is accessible
-    `chown www-data:www-data #{environment}.db`
-
     uid, gid = Process.euid, Process.egid
     user, group = 'www-data', 'www-data'
     target_uid = Etc.getpwnam(user).uid
@@ -89,4 +86,3 @@ after_fork do |server, worker|
     end
   end
 end
-

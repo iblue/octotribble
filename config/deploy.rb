@@ -28,13 +28,16 @@ namespace :deploy do
     run "#{try_sudo} mkdir -p #{(dirs+shared_subdirs).join(' ')}"
     run "#{try_sudo} chown -R #{user}:#{group} #{dirs.join(' ')}"
     run "#{try_sudo} chown -R #{server_user}:#{server_group} #{shared_subdirs.join(' ')}"
+    run "#{try_sudo} mkdir -p /var/log/octotribble"
+    run "#{try_sudo} chown -R #{server_user}:#{server_group} /var/log/octotribble"
 
     # Link server config
     run "#{try_sudo} ln -sf #{deploy_to}/current/config/nginx.conf /etc/nginx/sites-enabled/#{application}.conf"
+    run "#{try_sudo} ln -sf #{deploy_to}/current/config/initscript.sh /etc/init.d/#{application}"
   end
 
   task :restart, :except => {:no_release => true} do
     run "#{try_sudo} /etc/init.d/nginx reload"
-    run "#{try_sudo} /etc/init.d/unicorn upgrade"
+    run "#{try_sudo} /etc/init.d/#{application} upgrade"
   end
 end
