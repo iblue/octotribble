@@ -8,7 +8,7 @@ set -e
 APP_ROOT=/var/www/octotribble/current
 PID=/var/log/octotribble/unicorn.pid
 ENV=production
-CMD="/usr/local/bin/unicorn_rails -D -E $ENV -c config/unicorn.rb"
+CMD="/usr/bin/unicorn_rails -D -E $ENV -c config/unicorn.rb"
 
 old_pid="$PID.oldbin"
 
