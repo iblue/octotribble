@@ -21,5 +21,8 @@ gem 'deep_merge' # For internals
 # Production server
 gem "unicorn"
 
+# Deployment
+gem "capistrano"
+
 # ruby 2.0 debugger
 gem 'byebug', :group => :development

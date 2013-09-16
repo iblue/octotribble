@@ -5,6 +5,12 @@ GEM
     byebug (2.1.1)
       columnize (~> 0.3.6)
       debugger-linecache (~> 1.2.0)
+    capistrano (2.15.5)
+      highline
+      net-scp (>= 1.0.0)
+      net-sftp (>= 2.0.0)
+      net-ssh (>= 2.0.14)
+      net-ssh-gateway (>= 1.1.0)
     coffee-script (2.2.0)
       coffee-script-source
       execjs
@@ -15,9 +21,17 @@ GEM
     execjs (2.0.1)
     haml (4.0.3)
       tilt
+    highline (1.6.19)
     hike (1.2.3)
     kgio (2.8.1)
     multi_json (1.8.0)
+    net-scp (1.1.2)
+      net-ssh (>= 2.6.5)
+    net-sftp (2.1.2)
+      net-ssh (>= 2.6.5)
+    net-ssh (2.7.0)
+    net-ssh-gateway (1.2.0)
+      net-ssh (>= 2.6.5)
     rack (1.5.2)
     rack-funky-cache (0.0.6)
     rack-protection (1.5.0)
@@ -67,6 +81,7 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
+  capistrano
   deep_merge
   haml
   rack-funky-cache

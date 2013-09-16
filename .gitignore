@@ -4,3 +4,5 @@ content/*
 cache/*
 tmp/*
 *.db
+config/nginx.conf
+config/deploy.conf.rb
