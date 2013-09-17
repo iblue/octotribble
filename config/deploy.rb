@@ -18,6 +18,8 @@ set :server_group,   "www-data"
 set :shared_children, %w(db public cache)
 set :normalize_asset_timestamps, false
 
+set :shared_assets_prefix, "public/assets"
+
 namespace :deploy do
   task :setup, :except => { :no_release => true } do
     dirs = [deploy_to, releases_path, shared_path]
