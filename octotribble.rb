@@ -5,6 +5,8 @@ require './lib/frontmatter'
 
 module Octotribble
   class App < Sinatra::Base
+    set :environment, ENV['RAILS_ENV'] || "development"
+
     # Fix rendering bugs
     Tilt.register Tilt::RedcarpetTemplate::Redcarpet2, 'markdown', 'mkd', 'md'
 
