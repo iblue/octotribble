@@ -32,6 +32,11 @@ namespace :deploy do
     run "#{try_sudo} mkdir -p #{deploy_to}/shared/public/assets"
     run "#{try_sudo} chown -R #{user}:#{group} #{deploy_to}/shared/public/assets"
 
+    # DB: Local user needs access as well as deploy user.
+    # FIXME: Run asset precompilation as www-data and remove this.
+    run "#{try_sudo} chmod 777 #{deploy_to}/shared/db"
+    run "#{try_sudo} chmod 666 #{deploy_to}/shared/db/*.db"
+
     # Link server config
     run "#{try_sudo} ln -sf #{deploy_to}/current/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
     run "#{try_sudo} ln -sf #{deploy_to}/current/config/initscript.sh /etc/init.d/#{application}"
