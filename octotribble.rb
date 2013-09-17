@@ -49,7 +49,7 @@ module Octotribble
 
       @comment = Comment.new(params["comment"])
       if @comment.save
-        expire_page_cache(article["url"]+".html")
+        expire_page_cache(article["url"])
         redirect article["url"]+"#comment-#{@comment.id}"
       else
         # Möp!
