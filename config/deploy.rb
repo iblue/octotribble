@@ -28,8 +28,12 @@ namespace :deploy do
     run "#{try_sudo} mkdir -p /var/log/octotribble"
     run "#{try_sudo} chown -R #{server_user}:#{server_group} /var/log/octotribble"
 
+    # Asset directory
+    run "#{try_sudo} mkdir -p #{deploy_to}/shared/public/assets"
+    run "#{try_sudo} chown -R #{user}:#{group} #{deploy_to}/shared/public/assets"
+
     # Link server config
-    run "#{try_sudo} ln -sf #{deploy_to}/current/config/nginx.conf /etc/nginx/sites-enabled/#{application}.conf"
+    run "#{try_sudo} ln -sf #{deploy_to}/current/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
     run "#{try_sudo} ln -sf #{deploy_to}/current/config/initscript.sh /etc/init.d/#{application}"
   end
 
