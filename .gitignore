@@ -3,6 +3,6 @@ content/*
 .sass-cache
 cache/*
 tmp/*
-*.db
+db/*
 config/nginx.conf
 config/deploy.conf.rb

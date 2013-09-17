@@ -5,6 +5,8 @@ module Octotribble
     def self.registered(app)
       app.register Sinatra::SequelExtension
 
+      app.set :database, "sqlite://db/#{app.settings.environment}.db"
+
       # Make sure comments exist
       app.migration "create comments" do
         app.database.create_table :comments do
