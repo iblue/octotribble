@@ -3,7 +3,7 @@ environment = ENV['RAILS_ENV'] || 'production'
 
 root = File.expand_path(File.dirname(__FILE__)+"/..")
 
-working_directory root
+working_directory "/var/www/octotribble/current"
 pid "/var/log/octotribble/unicorn.pid"
 stderr_path "/var/log/octotribble/unicorn.log"
 stdout_path "/var/log/octotribble/unicorn.log"
