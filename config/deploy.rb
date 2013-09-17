@@ -15,7 +15,7 @@ after "deploy:restart", "deploy:cleanup"
 set :server_user,    "www-data"
 set :server_group,   "www-data"
 
-set :shared_children, %w(db public cache)
+set :shared_children, %w(db public cache tmp)
 set :normalize_asset_timestamps, false
 
 set :shared_assets_prefix, "public/assets"
@@ -36,6 +36,8 @@ namespace :deploy do
 
     # DB: Local user needs access as well as deploy user.
     # FIXME: Run asset precompilation as www-data and remove this.
+    run "#{try_sudo} touch #{deploy_to}/shared/production.db"
+    run "#{try_sudo} chown -R #{user}:#{group} #{deploy_to}/shared/db"
     run "#{try_sudo} chmod 777 #{deploy_to}/shared/db"
     run "#{try_sudo} chmod 666 #{deploy_to}/shared/db/*.db"
 
