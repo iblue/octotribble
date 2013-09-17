@@ -7,7 +7,6 @@ set :deploy_via, :copy
 set :scm, "git"
 set :repository, "."
 set :local_repository, "."
-set :branch, "master"
 
 set :deploy_to, "/var/www/octotribble"
 
