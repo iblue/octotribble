@@ -49,5 +49,8 @@ namespace :deploy do
   task :restart, :except => {:no_release => true} do
     run "#{try_sudo} /etc/init.d/nginx reload"
     run "#{try_sudo} /etc/init.d/#{application} upgrade"
+
+    # Clear cache
+    run "find #{deploy_to}/shared/public -type f ! -wholename \"*/assets/*\" -delete"
   end
 end
