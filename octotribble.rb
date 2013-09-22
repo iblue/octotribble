@@ -47,26 +47,36 @@ module Octotribble
     end
 
     post '/comment' do
-      # Check if there is an article with that path
-      article = articles.select{|a| a["path"] == params["comment"]["page"]}[0]
-      status 404 and return if !article
+      # Check if there is an article or a page with that path
+      page    = articles.select{|a| a["path"] == params["comment"]["page"]}[0]
+      page  ||= pages.select{|a| a["path"] == params["comment"]["page"]}[0]
+      status 404 and return if !page
 
       @comment = Comment.new(params["comment"])
       if @comment.save
-        expire_page_cache(article["url"])
-        redirect article["url"]+"#comment-#{@comment.id}"
+        expire_page_cache(page["url"])
+        redirect page["url"]+"#comment-#{@comment.id}"
       else
         # Möp!
       end
     end
 
     get '/*' do
-      status 404 and return if !article
+      if !article and !page
+        status 404 and return
+      end
 
-      @page     = article["path"]
-      @comments = Comment.filter(:page => @page)
-      content = File.open(article["path"], "rb"){|f| f.read}
-      markdown strip_frontmatter(content)
+      if article
+        @page     = article["path"]
+        @comments = Comment.filter(:page => @page)
+        content = File.open(@page, "rb"){|f| f.read}
+        markdown strip_frontmatter(content)
+      elsif page
+        @page     = page["path"]
+        @comments = Comment.filter(:page => @page)
+        content = File.open(@page, "rb"){|f| f.read}
+        markdown strip_frontmatter(content)
+      end
     end
   end
 end

@@ -16,6 +16,14 @@ module Octotribble
           articles.select{|a| a["url"] == request.path_info}[0]
         end
 
+        def pages
+          self.class.pages
+        end
+
+        def page
+          pages.select{|a| a["url"] == request.path_info}[0]
+        end
+
         def strip_frontmatter(content)
           content.sub(FRONTMATTER_REGEX, "")
         end
@@ -24,12 +32,22 @@ module Octotribble
 
     module ClassMethods
       def read_front_matter
+        @articles = read_directory('./articles', '/artikel/%y/%m')
+        @articles = @articles.sort{|a,b| a["date"] <=> b["date"]}.reverse
+
+        @pages    = read_directory('./pages')
+        @pages    = @pages.sort{|a,b| a["date"] <=> b["date"]}.reverse
+      end
+
+      def read_directory(path, url_path = '')
         all_data = []
-        Dir.foreach('./articles') do |item|
+
+        Dir.foreach(path) do |item|
           next if item =~ /^\./
-          full_path = "./articles/#{item}"
-          content = File.open("./articles/#{item}", "rb"){|f| f.read}
+          full_path = "#{path}/#{item}"
+          content = File.open("#{path}/#{item}", "rb"){|f| f.read}
           data = parse_yaml_front_matter(content)
+
 
           next if data["ignore"]
 
@@ -38,23 +56,24 @@ module Octotribble
 
           if data["date"]
             data["date"] = Time.parse(data["date"])
-            year  = data["date"].year
-            month = "%02d" % data["date"].month
-            url   = "/artikel/#{year}/#{month}/#{slug}/"
+            url   = data["date"].strftime(url_path) + "/#{slug}/"
           else
-            raise "date required"
+            url   = url_path + "/#{slug}/"
           end
 
           additionals = {"path" => full_path, "url" => url}
           all_data << data.deep_merge(additionals) if data
         end
 
-        # Sort by date descending
-        @articles = all_data.sort{|a,b| a["date"] <=> b["date"]}.reverse
+        all_data
       end
 
       def articles
         @articles
+      end
+
+      def pages
+        @pages
       end
 
       def parse_yaml_front_matter(content)
