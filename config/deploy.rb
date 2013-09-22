@@ -51,6 +51,7 @@ namespace :deploy do
     run "#{try_sudo} /etc/init.d/#{application} upgrade"
 
     # Clear cache
-    run "find #{deploy_to}/shared/public -type f ! -wholename \"*/assets/*\" -delete"
+    run "#{try_sudo} find #{deploy_to}/shared/public -type f ! -wholename \"*/assets/*\" -delete"
+    run "#{try_sudo} rm -rf #{deploy_to}/shared/cache/*"
   end
 end
