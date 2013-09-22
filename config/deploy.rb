@@ -53,5 +53,9 @@ namespace :deploy do
     # Clear cache
     run "#{try_sudo} find #{deploy_to}/shared/public -type f ! -wholename \"*/assets/*\" -and -name \"*.html\" -delete"
     run "#{try_sudo} rm -rf #{deploy_to}/shared/cache/*"
+
+    # Install static assets
+    run "#{try_sudo} cp -rf #{deploy_to}/current/static/* #{deploy_to}/shared/public/"
+    run "#{try_sudo} chown -R #{server_user}:#{server_group} #{deploy_to}/shared/public"
   end
 end
