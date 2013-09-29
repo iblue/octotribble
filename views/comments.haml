@@ -26,16 +26,25 @@
       %form{:action => "/comment", :method => "POST"}
         %fieldset
           %legend Schreibe einen Kommentar
-          %input{:type => "hidden", :name => "comment[page]", :value => @page}
+
+          - if @comment.errors.size > 0
+            %div{:class => "alert alert-error"}
+              %h3 Beim Speichern ist ein Fehler aufgetreten
+              %ul
+                - @comment.errors.each do |field,errors|
+                  %li <code>#{field}</code> #{errors.join(",")}
+              %p Bitte korrigieren Sie die Fehler und versuchen Sie es erneut.
+
+          %input{:type => "hidden", :name => "comment[page]", :value => @comment.page}
 
           %label{:for => "comment_author_name"} Name
-          %input{:type => "text", :placeholder => "Vorname Nachname", :id => "comment_author_name", :name => "comment[author_name]", :required => true}
+          %input{:type => "text", :placeholder => "Vorname Nachname", :id => "comment_author_name", :name => "comment[author_name]", :required => true, :value => @comment.author_name}
 
           %label{:for => "comment_author_name"} Homepage (optional)
-          %input{:type => "text", :placeholder => "http://www.example.org/", :id => "comment_author_url", :name => "comment[author_url]"}
+          %input{:type => "text", :placeholder => "http://www.example.org/", :id => "comment_author_url", :name => "comment[author_url]", :value => @comment.author_url}
 
           %label{:for => "comment_author_email"} E-Mail
-          %input{:type => "text", :placeholder => "user@example.org", :id => "comment_author_email", :name => "comment[author_email]", :required => true}
+          %input{:type => "text", :placeholder => "user@example.org", :id => "comment_author_email", :name => "comment[author_email]", :required => true, :value => @comment.author_email}
           %span.help-block 
             (Deine E-Mail-Adresse wird nicht veröffentlicht, aber wenn du
             bei <a href="http://gravatar.com/">Gravatar</a> eingetragen
@@ -43,5 +52,6 @@
 
           %label{:for => "comment_content"} Kommentar
           %textarea.span6{:id => "comment_content", :name => "comment[content]", :rows => 5, :required => true}
+            =@comment.content
           .form-actions
             %button.btn.btn-primary{:type => "submit"} Veröffentlichen

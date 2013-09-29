@@ -3,6 +3,9 @@ require 'digest/md5'
 class Comment < Sequel::Model
   def validate
     self.author_url = nil if (author_url && author_url.strip == "")
+    unless self.author_email =~ RFC822::EMAIL
+      self.errors.add(:author_email, 'is invalid')
+    end
     self.created_at ||= Time.now
   end
 

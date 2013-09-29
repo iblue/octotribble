@@ -53,11 +53,14 @@ module Octotribble
       status 404 and return if !page
 
       @comment = Comment.new(params["comment"])
-      if @comment.save
+      if @comment.save(:raise_on_failure => false)
         expire_page_cache(page["url"])
         redirect page["url"]+"#comment-#{@comment.id}"
       else
-        # Möp!
+        @page = page["path"]
+        @comments = Comment.filter(:page => @page)
+        content = File.open(@page, "rb"){|f| f.read}
+        markdown strip_frontmatter(content)
       end
     end
 
@@ -66,14 +69,17 @@ module Octotribble
         status 404 and return
       end
 
+
       if article
         @page     = article["path"]
         @comments = Comment.filter(:page => @page)
+        @comment  = Comment.new(:page => @page)
         content = File.open(@page, "rb"){|f| f.read}
         markdown strip_frontmatter(content)
       elsif page
         @page     = page["path"]
         @comments = Comment.filter(:page => @page)
+        @comment  = Comment.new(:page => @page)
         content = File.open(@page, "rb"){|f| f.read}
         markdown strip_frontmatter(content)
       end
