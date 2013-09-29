@@ -1,5 +1,8 @@
 load './config/deploy.conf.rb'
 
+# Automatically install new gems on server
+require 'bundler/capistrano'
+
 set :application, "octotribble"
 set :ssh_options, { :forward_agent => true }
 
@@ -56,6 +59,5 @@ namespace :deploy do
 
     # Install static assets
     run "#{try_sudo} cp -rf #{deploy_to}/current/static/* #{deploy_to}/shared/public/"
-    run "#{try_sudo} chown -R #{server_user}:#{server_group} #{deploy_to}/shared/public"
   end
 end
